@@ -15,18 +15,17 @@ cartes-elections/
 ├── index.html # Page d'index listant les cartes générées
 
 
-## 🚀 Démarrer le projet
-
-1. Cloner le dépôt :
+## Lien du dépôt (pour cloner) :
 
 git clone https://github.com/Mofy75/cartes-elections.git
 
 
 
-🌐 Aperçu des cartes
-Les cartes générées sont accessibles via index.html.
+## 🌐 Aperçu des cartes
+Les cartes générées sont accessibles via index.html
+https://mofy75.github.io/cartes-elections/
 
-📄 Licence
+## 📄 Licence
 Projet personnel d’analyse électorale. Tous droits réservés.
 
 
