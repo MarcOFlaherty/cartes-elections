@@ -5,9 +5,13 @@ Ce dépôt contient des scripts Python permettant de générer des cartes intera
 ## 📁 Structure du projet
 
 cartes-elections/
+
 ├── data/ # Données sources (CSV, shapefiles, etc.)
+
 ├── outputs/ # Cartes HTML générées
+
 ├── scripts/ # Scripts Python pour générer les cartes
+
 ├── index.html # Page d'index listant les cartes générées
 
 
