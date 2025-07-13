@@ -2,14 +2,53 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Cartes électorales</title>
+  <title>Carte – Municipales 2020 à Paris</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px auto;
+      max-width: 800px;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1 {
+      color: #b30000;
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #b30000;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+    a.button:hover {
+      background-color: #8a0000;
+    }
+  </style>
 </head>
 <body>
-  <h1>🚧 Chantier en cours 🚧</h1>
-    <h2>Bienvenue sur mes cartes électorales de Paris 12 🗳️</h2>
+
+  <h1>Carte interactive – Élections municipales 2020 à Paris</h1>
+
+  <p>
+    Cette carte représente les résultats du <strong>premier tour des municipales de 2020</strong>, bureau de vote par bureau de vote, à Paris.
+  </p>
+
+  <h2>📌 Ce que montre la carte</h2>
   <ul>
-    <li><a href="outputs/carte_municipales_2020.html">Municipales 2020 – Paris 12</a></li>
-    <li><a href="outputs/carte_abstention.html">Carte de l’abstention</a></li>
+    <li><strong>Vote majoritaire :</strong> chaque polygone représente un bureau de vote, coloré selon la famille politique arrivée en tête. En survolant, on peut voir le score du gagnant et le détail par famille politique.</li>
+    <li><strong>Taux d’abstention :</strong> une seconde couche affiche l’abstention par bureau, avec une échelle de couleurs du beige clair (faible abstention) au rouge sombre (forte abstention).</li>
   </ul>
+
+  <p>
+    Les données sont extraites des résultats officiels de la Ville de Paris, retraitées puis superposées aux géométries des bureaux de vote de 2020.
+  </p>
+
+  <a class="button" href="outputs/carte_municipales_paris_2020.html" target="_blank">👉 Voir la carte interactive</a>
+
 </body>
 </html>
+
