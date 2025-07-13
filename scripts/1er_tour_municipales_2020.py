@@ -93,12 +93,12 @@ for _, row in gdf_merge.iterrows():
     ).add_to(fg_abstention)
 
 # === Couche 2 : Vote majoritaire
-fg_vote = folium.FeatureGroup(name="Vote majoritaire")
+fg_vote = folium.FeatureGroup(name="Parti arrivé en tête")
 for _, row in gdf_merge.iterrows():
     tooltip = (
         f"<b>Bureau :</b> {row.get('ID_BVOTE')}<br>"
-        f"<b>Majoritaire :</b> {row.get('Parti_majoritaire')}<br>"
-        f"<b>Score :</b> {row.get('Score_majoritaire', 0):.1f}%"
+        f"<b>Parti en tête :</b> {row.get('Parti_majoritaire')}<br>"
+        f"<b>Part des votes :</b> {row.get('Score_majoritaire', 0):.1f}%"
     )
 
     folium.GeoJson(
@@ -113,9 +113,54 @@ for _, row in gdf_merge.iterrows():
     ).add_to(fg_vote)
 
 
+# === Couche 3 : (Top 3 partis arrivés en tête) ===
+fg_top3 = folium.FeatureGroup(name="Top 3 partis arrivés en tête")
+part_cols = [col for col in df.columns if col.startswith("Proportion_")]
+
+# Dictionnaire de couleurs par famille politique
+COULEURS = {
+    "PS": "hotpink",
+    "EELV": "green",
+    "LREM Buzyn": "gold",
+    "LREM Villani": "brown",
+    "LFI": "purple",
+    "LR": "blue",
+    "LDVD": "gray"
+}
+
+for _, row in gdf_merge.iterrows():
+    # Récupération des scores
+    scores = [(col.replace("Proportion_", ""), row[col]) for col in part_cols if not pd.isna(row[col])]
+    top3 = sorted(scores, key=lambda x: x[1], reverse=True)[:3]
+
+    # Tooltip détaillé avec top 3
+    tooltip = f"<b>Bureau :</b> {row.get('ID_BVOTE')}<br><hr>"
+    for parti, score in top3:
+        tooltip += f"{parti} : {score:.1f}%<br>"
+
+    # On récupère la famille gagnante depuis les colonnes calculées
+    gagnant = top3[0][0] if top3 else None
+    couleur = COULEURS.get(gagnant, "#ffffff")
+
+    # Style de couleur figé
+    style = {
+        "fillColor": couleur,
+        "color": "black",
+        "weight": 0.1,
+        "fillOpacity": 0.1,
+    }
+
+    folium.GeoJson(
+        row.geometry,
+        style_function=lambda x, style=style: style,
+        tooltip=tooltip,
+    ).add_to(fg_top3)
+
+
 # Ajout des couches
 fg_abstention.add_to(m)
 fg_vote.add_to(m)
+fg_top3.add_to(m)
 folium.LayerControl(collapsed=False).add_to(m)
 
 # === Sauvegarde ===

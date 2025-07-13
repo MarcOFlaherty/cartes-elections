@@ -28,7 +28,9 @@ gdf = gpd.read_file(geojson_path)
 df = df.rename(columns=lambda col: col.replace("Porportion_", "Proportion_"))
 
 # Création des colonnes nécessaires
-df["Taux_abstention"] = (1 - df["Participation"])*100  # Conversion en pourcentage
+df["Taux_abstention"] = 1 - df["Participation"]
+df["Taux_abstention"] = df["Taux_abstention"] * 100
+
 
 # Passage en proportion
 for col in df.columns:
@@ -51,6 +53,26 @@ def couleur_abstention(taux):
     elif taux < 60: return "#e34a33"
     else: return "#b30000"
 
+# === Détection du parti majoritaire
+FAMILLE_COULEURS = {
+    "(PS)": "hotpink",
+    "(EELV)": "green",
+    "(LREM Buzyn)": "gold",
+    "(LREM Villani)": "orange",
+    "(LR)": "blue",
+    "LFI": "purple"
+}
+
+# Trouver le parti avec la plus forte proportion
+part_cols = [col for col in df.columns if col.startswith("Proportion_")]
+df["Parti_majoritaire"] = df[part_cols].idxmax(axis=1).str.replace("Proportion_", "")
+df["Score_majoritaire"] = df[part_cols].max(axis=1)
+df["Couleur"] = df["Parti_majoritaire"].map(FAMILLE_COULEURS)
+
+# Mettre à jour gdf_merge
+gdf_merge = gdf.merge(df, left_on="id_bv", right_on="ID_BVOTE", how="left")
+
+
 # === Création de la carte ===
 print("🗺️ Création de la carte...")
 m = folium.Map(location=[48.8566, 2.3522], zoom_start=12, tiles="cartodb positron")
@@ -70,28 +92,26 @@ for _, row in gdf_merge.iterrows():
         tooltip=tooltip,
     ).add_to(fg_abstention)
 
-# === Couche 2 : Vote majoritaire (Top 3 partis) ===
-fg_vote = folium.FeatureGroup(name="Votes par bureau – top 3 partis")
+# === Couche 2 : Vote majoritaire
+fg_vote = folium.FeatureGroup(name="Vote majoritaire")
 for _, row in gdf_merge.iterrows():
-    # Récupération des colonnes de proportion
-    part_cols = [col for col in df.columns if col.startswith("Proportion_")]
-    scores = [(col.replace("Proportion_", ""), row[col]) for col in part_cols if not pd.isna(row[col])]
-    top3 = sorted(scores, key=lambda x: x[1], reverse=True)[:3]
-
-    tooltip = f"<b>Bureau :</b> {row.get('ID_BVOTE')}<br><hr>"
-    for parti, score in top3:
-        tooltip += f"{parti} : {score:.1f}%<br>"
+    tooltip = (
+        f"<b>Bureau :</b> {row.get('ID_BVOTE')}<br>"
+        f"<b>Majoritaire :</b> {row.get('Parti_majoritaire')}<br>"
+        f"<b>Score :</b> {row.get('Score_majoritaire', 0):.1f}%"
+    )
 
     folium.GeoJson(
         row.geometry,
-        style_function=lambda x: {
-            "fillColor": "white",
+        style_function=lambda x, color=row["Couleur"]: {
+            "fillColor": color if pd.notna(color) else "white",
             "color": "black",
             "weight": 0.3,
-            "fillOpacity": 0,
+            "fillOpacity": 0.8,
         },
         tooltip=tooltip,
     ).add_to(fg_vote)
+
 
 # Ajout des couches
 fg_abstention.add_to(m)
