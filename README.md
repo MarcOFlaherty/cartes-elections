@@ -17,7 +17,7 @@ cartes-elections/
 
 ## Lien du dépôt (pour cloner) :
 
-git clone https://github.com/Mofy75/cartes-elections.git
+git clone https://github.com/MarcOFlaherty/cartes-elections.git
 
 
 
