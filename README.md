@@ -23,7 +23,7 @@ git clone https://github.com/Mofy75/cartes-elections.git
 
 ## 🌐 Aperçu des cartes
 Les cartes générées sont accessibles via index.html
-https://mofy75.github.io/cartes-elections/
+https://MarcOFlaherty.github.io/cartes-elections/
 
 ## 📄 Licence
 Projet personnel d’analyse électorale. Tous droits réservés.
