@@ -1,0 +1,11 @@
+*Open data résultats élections :*
+
+**Premier tour :**
+https://opendata.paris.fr/explore/dataset/elections-municipales-2020-1ertour/information/
+
+**Second tour :**
+https://opendata.paris.fr/explore/dataset/elections-municipales-2020-2emetour/information/
+
+
+*Archive du parti des candidats à chaque Mairie d'arrondissement*
+https://www.archives-resultats-elections.interieur.gouv.fr/resultats/municipales-2020/075/C1075056.php
